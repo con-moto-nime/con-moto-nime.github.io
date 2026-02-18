@@ -6,33 +6,291 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Encypher: Embodied Steering of Music Transformers for Live Dance Improvisation</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ADDED STYLES FOR INTERACTIVE LAYOUT */
+        
+        .interactive-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .chapter-list {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .chapter-group {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .chapter-group:last-child {
+            border-bottom: none;
+        }
+
+        .chapter-group h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .time-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            padding: 8px 10px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+            font-size: 0.9rem;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .time-btn:hover {
+            background-color: #f0f4ff;
+            color: #667eea;
+        }
+
+        .time-btn .timestamp {
+            font-family: monospace;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 10px;
+            font-size: 0.8rem;
+            color: #666;
+            min-width: 55px;
+            text-align: center;
+        }
+
+        .time-btn:hover .timestamp {
+            background: #dfe6ff;
+            color: #667eea;
+        }
+        
+        /* STYLE FOR THE DYNAMIC DESCRIPTION */
+        #chapter-description {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            min-height: 80px; /* Prevents layout jump when text changes */
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 900px) {
+            .interactive-container {
+                grid-template-columns: 1fr;
+            }
+            .chapter-list {
+                max-height: 400px;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <header>
         <div class="container">
-            <h1>Encypher: Embodied Steering of Music Transformers for Live Dance Improvisation
-            </h1>
-            <h3 style="color: white;">Supplementary Media</h3>
+            <h1>Encypher</h1>
+            <h3 style="color: white;">Embodied Steering of Music Transformers for Live Dance Improvisation</h3>
             <p class="subtitle">Anonymous</p>
         </div>
     </header>
 
-    <section id="dance">
-        <div class="media-item video-card">
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube-nocookie.com/embed/-jerV9M2MOI?si=wfqC4IYY6sepHRRP"
-                    title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen>
-                </iframe>
-            </div>
+    <main class="container">
+        <section id="dance">
+            <h2>Abstract</h2>
+            <p>Encypher is a real-time generative music system for dance improvisation 
+                that supports embodied steering of a transformer model
+                with configurable levels of agency. While existing frameworks
+                demonstrate the potential of embodied music-making and movement 
+                sonification in live performance, achieving both high musical 
+                coherence and low-latency responsiveness remains an ongoing 
+                challenge. In response, we leverage the musical coherence
+                of real-time MIDI-based transformer models to design an integrated 
+                system that translates camera motion data into movement
+                parameters, which in turn control the musical output. Encypher
+                employs two layers of control strategies: 1) inference-time steering 
+                of the transformer model and 2) post-generation rendering
+                using Max/MSP as a control interface and Ableton Live for sound
+                synthesis. We present the system through a duet performance
+                for a live audience, supplemented by qualitative reflections from
+                the dancers and the audience. By reconfiguring how the dancers’
+                movements map to musical functions, we create a system with
+                configurable agency. Fine-grained control over an individual musical 
+                voice invited dancers to experience the system as a playable
+                instrument, while abstract musical mappings to a genre’s energy
+                opened space for the system to act as an autonomous creative
+                partner. By navigating the aesthetic friction between human intent 
+                and AI agency, we explore a dynamic that facilitates a deep,
+                bidirectional feedback loop</p>
+            <h2>Performance Analysis</h2>
+            
+            <p id="chapter-description">
+                <strong>Select a segment below</strong> to jump to that specific moment in the performance. The description here will update to explain the technical mappings used in that section.
+            </p>
+            
+            <div class="interactive-container">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <div id="player"></div>
+                    </div>
+                </div>
 
-            <!-- Optional caption -->
-            <!-- <p class="caption">Dancer explores the embodied sonic space.</p> -->
+                <div class="chapter-list">
+                    
+                    <div class="chapter-group">
+                        <h4>Agency 1: One Voice</h4>
+                        <button class="time-btn" onclick="seekTo(9)">
+                            <span class="timestamp">0:09</span> Pitch range (one voice)
+                        </button>
+                        <button class="time-btn" onclick="seekTo(85)">
+                            <span class="timestamp">1:25</span> Articulation
+                        </button>
+                        <button class="time-btn" onclick="seekTo(115)">
+                            <span class="timestamp">1:55</span> Velocity (one voice)
+                        </button>
+                    </div>
+
+                    <div class="chapter-group">
+                        <h4>Agency 2: Separate Voices</h4>
+                        <button class="time-btn" onclick="seekTo(170)">
+                            <span class="timestamp">2:50</span> Second voice
+                        </button>
+                        <button class="time-btn" onclick="seekTo(177)">
+                            <span class="timestamp">2:57</span> Pitch range (two voices)
+                        </button>
+                        <button class="time-btn" onclick="seekTo(200)">
+                            <span class="timestamp">3:20</span> Velocity (two voice)
+                        </button>
+                        <button class="time-btn" onclick="seekTo(220)">
+                            <span class="timestamp">3:40</span> Timbre (distortion)
+                        </button>
+                    </div>
+
+                    <div class="chapter-group">
+                        <h4>Agency 3: Instruments</h4>
+                        <button class="time-btn" onclick="seekTo(245)">
+                            <span class="timestamp">4:05</span> Multiple instruments
+                        </button>
+                        <button class="time-btn" onclick="seekTo(337)">
+                            <span class="timestamp">5:37</span> Velocity (instrument)
+                        </button>
+                    </div>
+
+                    <div class="chapter-group">
+                        <h4>Agency 4: Genres</h4>
+                        <button class="time-btn" onclick="seekTo(425)">
+                            <span class="timestamp">7:05</span> Multiple genres
+                        </button>
+                        <button class="time-btn" onclick="seekTo(485)">
+                            <span class="timestamp">8:05</span> The Switch (Partnering)
+                        </button>
+                        <button class="time-btn" onclick="seekTo(600)">
+                            <span class="timestamp">10:00</span> Both Taking Over
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Supplementary Media</p>
         </div>
-    </section>
+    </footer>
+
+    <script>
+        // --- 1. CONFIGURATION: Chapter Descriptions ---
+        // Edit the text inside the quotes to change the description for that timestamp.
+        const descriptions = {
+            9: "<strong>Pitch range:</strong> The performance begins with a single dancer steering one piano voice trained on a classical music dataset. Horizontal stage location maps to pitch range. The dancer imagines the stage as a giant piano. Left is lower pitch range and right is higher pitch range. ",
+            
+            85: "<strong>Articulation:</strong> Height of the dancer controls articulation. Vertical movement (levels) determines how staccato or legato the notes are played. Higher is more legato while lower is more legato. We designed this mapping through a session with the external dancer as a way to have direct controllability.",
+            
+            115: "<strong>Velocity:</strong> Energy of the dancer controls velocity of the individual voice MIDI. We calculate energy as weighted average limb velocity over a two second rolling window.",
+            
+            170: "<strong>Second voice:</strong> The first dancer invites the second dancer to join and the performance becomes a duet. The system now tracks two separate skeletons, assigning distinct voices to each performer following the same classical music dataset.",
+            
+            177: "<strong>Pitch range:</strong> Both voices now utilize horizontal stage location mapping. The two dancers can independently control the pitch range of their specific voice based on who is on the left and right of eachother.",
+            
+            200: "<strong>Velocity:</strong> Voice-specific velocity. Each dancer's individual energy level controls the MIDI velocity of their assigned musical voice.",
+            
+            220: "<strong>Timbre:</strong> Proximity is used for a distortion effect control to highlight the spatial and musical relationship between the two dancers.",
+            
+            245: "<strong>Multiple instruments:</strong> The collapse on the floor is a gesture for a major state change. This triggers a shift in section, mappings, instrument assignment, and musical genre.",
+            
+            337: "<strong>Velocity:</strong> Velocity control of specific instruments. The dancer in the 'spotlight', who is cyphering, has their instrument turned on and manipulated by their dancing energy.",
+            
+            425: "<strong>Multiple genres:</strong> The hug signals an end and the dancers leave the stage, but the machine asserts agency by restarting the music on its own, prompting a response from the dancers.",
+            
+            485: "<strong>Velocity (genre):</strong> Energy of the dancer controls velocity of all the instruments within their specific genre. Visible volume differences emerge based on the energy of each dancer, bringing out new instrumentation based on the genre they represent.",
+            
+            600: "<strong>Clash:</strong> Both dancers take over, merging their controls to drive the finale of the improvisation where two genres clash over the same drum beat."
+        };
+
+        // --- 2. YOUTUBE API SETUP ---
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: '-jerV9M2MOI', 
+                playerVars: { 'playsinline': 1, 'rel': 0 },
+                events: { 'onReady': onPlayerReady }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player is ready
+        }
+
+        // --- 3. SEEK & UPDATE TEXT FUNCTION ---
+        function seekTo(seconds) {
+            // A. Jump video
+            if (player && player.seekTo) {
+                player.seekTo(seconds, true);
+                player.playVideo();
+            }
+
+            // B. Update Description Text
+            const descBox = document.getElementById('chapter-description');
+            
+            // Check if we have a description for this second
+            if (descriptions[seconds]) {
+                descBox.innerHTML = descriptions[seconds];
+            } else {
+                // Fallback text if no description matches
+                descBox.innerHTML = "Playing segment starting at " + seconds + " seconds...";
+            }
+        }
+    </script>
 
 </body>
-
 </html>
